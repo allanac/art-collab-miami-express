@@ -30,7 +30,7 @@ router.post('/signup', (req,res,next) => {
 
         const theUser = new UserModel({
             username: req.body.signupUsername,
-            encryptedPassword = hashPassword
+            encryptedPassword: hashPassword
         });
 
         theUser.save((err) => {
