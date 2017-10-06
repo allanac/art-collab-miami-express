@@ -34,6 +34,8 @@ router.post('/signup', (req,res,next) => {
         });
 
         theUser.save((err) => {
+            console.log('The User.save -------'); // DELETE THIS LINE BEFORE DEPLOYMENT
+            console.log(theUser); // DELETE THIS LINE BEFORE DEPLOYMENT
             if(err){
               res.status(500).json({ errorMessage: 'Error saving user.'});
               return;
@@ -68,6 +70,8 @@ router.post('/login', (req,res,next) => {
           return;
         }
         req.login(theUser,(err) => {
+          console.log('The User.login -------'); // DELETE THIS LINE BEFORE DEPLOYMENT
+          console.log(theUser); // DELETE THIS LINE BEFORE DEPLOYMENT
             if(err){
               res.status(500).json({errorMessage:'Login failed'});
               return;
