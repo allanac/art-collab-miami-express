@@ -52,6 +52,9 @@ app.use('/', index);
 const authorizeRoutes = require('./routes/authorize-api-router');
 app.use('/api', authorizeRoutes);
 
+const profileRoutes = require('./routes/profile-api-router');
+app.use('/api', profileRoutes);
+
 // ------ Routes End ----------------//
 
 // // if no Express routes match, sent the browser the Angular app.

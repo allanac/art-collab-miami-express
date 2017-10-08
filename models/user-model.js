@@ -8,7 +8,7 @@ const userSchema = new Schema(
     fullName:{type:String, required: false},
     userPic:{type:String, required: false},
     genre: {type:Array, required:false},
-    artForm: {type:String, required:false},
+    artForm: {type:[String], required:false},
     artTools: {type:[String] , required: false},
     collabStyle: {type:String, required:false},
     bio: {type:String, required:false},
