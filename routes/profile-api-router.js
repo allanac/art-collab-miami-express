@@ -33,6 +33,9 @@ router.put('/profile/:userId', myUploader.single('userImage'), (req, res, next) 
 
 
   UserModel.findById(req.params._id, (err, userFromDb) => {
+    console.log('Here in the FIND by ID Profile api router - line 36');
+    console.log(req.user);
+
     if(err){
       console.log('User profile error', err);
       res.status(500).json({ errorMessage: 'User profile went wrong'});
@@ -51,7 +54,7 @@ router.put('/profile/:userId', myUploader.single('userImage'), (req, res, next) 
       bio: req.body.userBio
     });
 
-    if(req.file){userFromDb.userPic = '/uploads' + req.file.filename;}
+    if(req.file){userFromDb.profilePic = '/uploads/' + req.file.filename;}
 
     // userFromDb.updateOne(
     //   {_id:req.params.id }, updateDoc,
