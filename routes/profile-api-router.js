@@ -22,7 +22,8 @@ router.get('/profile', (req,res,next) => {
 
 
 // ---------/API/PROFILE/:USERID ----- //
-router.put('/profile/:userId', myUploader.single('userImage'), (req, res, next) => {
+router.put('/profile/', myUploader.single('userImage'), (req, res, next) => {
+  //console.log(req.params.id);
   console.log('I am inside the api/profile/put user --------') // DELETE BEFORE DEPLOYMENT
   console.log(req.user);  // DELETE BEFORE DEPLOYMENT
 
@@ -32,9 +33,7 @@ router.put('/profile/:userId', myUploader.single('userImage'), (req, res, next) 
   }
 
 
-  UserModel.findById(req.params._id, (err, userFromDb) => {
-    console.log('Here in the FIND by ID Profile api router - line 36');
-    console.log(req.user);
+  UserModel.findById(req.user._id, (err, userFromDb) => {
 
     if(err){
       console.log('User profile error', err);
@@ -47,14 +46,16 @@ router.put('/profile/:userId', myUploader.single('userImage'), (req, res, next) 
 
     userFromDb.set({
       fullName:req.body.userFullName,
-      genre: req.body.userGenre,
       artForm: req.body.userArtForm,
-      artTools: req.body.userArtTools,
+      genre: req.body.userGenre,
       collabStyle:req.body.userCollabStyle,
+      artTools: req.body.userArtTools,
       bio: req.body.userBio
     });
-
     if(req.file){userFromDb.profilePic = '/uploads/' + req.file.filename;}
+
+    console.log('After set before save - line 57');
+    console.log(req.user);
 
     // userFromDb.updateOne(
     //   {_id:req.params.id }, updateDoc,

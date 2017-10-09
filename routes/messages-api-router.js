@@ -6,7 +6,7 @@ const MessageModel = require('../models/message-model.js');
 const router = express.Router();
 
 router.get('/messages', (req, res, next) => {
-  console.log('Check');
+  console.log('Check getting conversations');
   // This route will display all conversations the signed in user has with other users
   // Only return one message from each conversation to display as snippet
   ConversationModel.find({ participants: req.user._id })
