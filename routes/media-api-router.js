@@ -150,7 +150,7 @@ router.delete('/media/:mediaId', (req, res, next) => {
 
 // GET my MEDIA /api/mymedia/
 router.get('/mymedia', (req,res,next) => {
-    if(req.user) {
+    if(!req.user) {
       res.status(401).json({ errorMessage: 'Not logged in!'});
       return;
     }

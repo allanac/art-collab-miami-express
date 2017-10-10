@@ -58,6 +58,9 @@ app.use('/api', profileRoutes);
 const mediaRoutes = require('./routes/media-api-router');
 app.use('/api', mediaRoutes);
 
+const messagesRoutes = require('./routes/messages-api-router');
+app.use('/api', messagesRoutes);
+
 // ------ Routes End ----------------//
 
 // // if no Express routes match, sent the browser the Angular app.

@@ -5,6 +5,8 @@ const MessageModel = require('../models/message-model.js');
 
 const router = express.Router();
 
+
+// GET /api/messages
 router.get('/messages', (req, res, next) => {
   console.log('Check getting conversations');
   // This route will display all conversations the signed in user has with other users
@@ -15,7 +17,7 @@ router.get('/messages', (req, res, next) => {
       path: "participants",
       select: "name"
     })
-    .exec(err, conversations) => {
+    .exec((err, conversations) => {
         if (err) {
           res.status(500).json({errorMessage: 'Error finfinf conversations'});
           return;
@@ -44,6 +46,7 @@ router.get('/messages', (req, res, next) => {
             if (message){
               message.recipient = recipient;
             }
+
             fullConversations.push(message);
             if(fullConversations.length === conversations.length)
               {
@@ -56,7 +59,7 @@ router.get('/messages', (req, res, next) => {
 });
 
 
-
+// GET /api/messages/:recipient
 router.get('/messages/:recipient', (req, res, next) => {
   // This route will display the specific messages with logged in user and other user
   ConversationModel.findOne(
@@ -107,7 +110,7 @@ router.get('/messages/:recipient', (req, res, next) => {
   )
 });
 
-
+// POST /api/messages/:recipient/chat
 router.post('/messages/:recipient/chat', (req, res, next) => {
   ConversationModel.findOne(
     {participants:
@@ -145,25 +148,25 @@ router.post('/messages/:recipient/chat', (req, res, next) => {
 });
 
 
-function sendMessage (req, res, next, conversation) {
-  const message = new MessageModel({
-    conversationId: conversation._id,
-    body: req.body.composedMessage,
-    author: req.user._id
-  });
-
-  message.save((err, sentReply) => {
-    if (err) {
-      next(err);
-      return;
-    }
-
-    res.redirect('/messages/' + req.params.recipient);
-  });
-}
-
-
-
+// function sendMessage (req, res, next, conversation) {
+//   const message = new MessageModel({
+//     conversationId: conversation._id,
+//     body: req.body.composedMessage,
+//     author: req.user._id
+//   });
+//
+//   message.save((err, sentReply) => {
+//     if (err) {
+//       next(err);
+//       return;
+//     }
+//
+//     res.redirect('/messages/' + req.params.recipient);
+//   });
+// }
+//
+//
+//
 // // DELETE Route to Delete Conversation
 // router.get(deleteConversation = function(req, res, next) {
 //   Conversation.findOneAndRemove({
@@ -179,7 +182,7 @@ function sendMessage (req, res, next, conversation) {
 //         return next();
 //   });
 // }
-// //
+
 
 
 
