@@ -41,9 +41,6 @@ router.put('/profile/', myUploader.single('userImage'), (req, res, next) => {
       return;
       }
 
-    // var updateDoc = req.body;
-    // delete updateDoc._id;
-
     userFromDb.set({
       fullName:req.body.userFullName,
       artForm: req.body.userArtForm,
@@ -57,18 +54,6 @@ router.put('/profile/', myUploader.single('userImage'), (req, res, next) => {
     console.log('After set before save - line 57');
     console.log(req.user);
 
-    // userFromDb.updateOne(
-    //   {_id:req.params.id }, updateDoc,
-    //   (err, doc) => {
-    //     if(err){
-    //       res.status(500).json({ errorMessage: 'Failed to update usere Profile'});
-    //       return;
-    //     }
-    //     else{
-    //       res.status(200).json(req.params.id);
-    //     }
-    //   }//updateDoc
-    //   ); //updateOne
 
     userFromDb.save((err) => {
       if(userFromDb.errors){

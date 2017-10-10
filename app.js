@@ -55,6 +55,9 @@ app.use('/api', authorizeRoutes);
 const profileRoutes = require('./routes/profile-api-router');
 app.use('/api', profileRoutes);
 
+const mediaRoutes = require('./routes/media-api-router');
+app.use('/api', mediaRoutes);
+
 // ------ Routes End ----------------//
 
 // // if no Express routes match, sent the browser the Angular app.
