@@ -15,7 +15,7 @@ router.get('/messages', (req, res, next) => {
     .select('_id participants')
     .populate({
       path: "participants",
-      select: "name"
+      select: "username"
     })
     .exec((err, conversations) => {
         if (err) {
@@ -62,13 +62,17 @@ router.get('/messages', (req, res, next) => {
 // GET /api/messages/:recipient
 router.get('/messages/:recipient', (req, res, next) => {
   // This route will display the specific messages with logged in user and other user
+  if(!req.user){
+    res.status(401).json({errorMessage: 'Not logged in'});
+    return;
+  }
   ConversationModel.findOne(
     {participants:
         { $size: 2, $all:[req.user._id, req.params.recipient] }
       },
 
       (err, conversation) => {
-        if(conversation === null){
+        if(!conversation){
           const newConversation = new ConversationModel (
             {
               participants: [
@@ -110,8 +114,8 @@ router.get('/messages/:recipient', (req, res, next) => {
   )
 });
 
-// POST /api/messages/:recipient/chat
-router.post('/messages/:recipient/chat', (req, res, next) => {
+// POST /api/messages/:recipient/
+router.post('/messages/:recipient', (req, res, next) => {
   ConversationModel.findOne(
     {participants:
         { $size: 2, $all:[req.user._id, req.params.recipient] }
@@ -148,22 +152,23 @@ router.post('/messages/:recipient/chat', (req, res, next) => {
 });
 
 
-// function sendMessage (req, res, next, conversation) {
-//   const message = new MessageModel({
-//     conversationId: conversation._id,
-//     body: req.body.composedMessage,
-//     author: req.user._id
-//   });
-//
-//   message.save((err, sentReply) => {
-//     if (err) {
-//       next(err);
-//       return;
-//     }
-//
-//     res.redirect('/messages/' + req.params.recipient);
-//   });
-// }
+function sendMessage (req, res, next, conversation) {
+  const message = new MessageModel({
+    conversationId: conversation._id,
+    body: req.body.messageBody,
+    author: req.user._id
+  });
+
+  message.save((err, sentReply) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({errorMessage: 'Save Message Error'})
+      return;
+    }
+
+    res.status(200).json(message);
+  });
+}
 //
 //
 //
@@ -182,9 +187,6 @@ router.post('/messages/:recipient/chat', (req, res, next) => {
 //         return next();
 //   });
 // }
-
-
-
 
 
 module.exports = router;

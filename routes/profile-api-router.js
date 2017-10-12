@@ -6,7 +6,7 @@ const router = express.Router();
 const myUploader = multer({dest:__dirname + '/../public/uploads'});
 
 // ---------- /API/PROFILE --------- //
-router.get('/profile', (req,res,next) => {
+router.get('/myprofile', (req,res,next) => {
   console.log('The /API/PROFILE User: -------'); // DELETE THIS LINE BEFORE DEPLOYMENT
   console.log(req.user); // DELETE THIS LINE BEFORE DEPLOYMENT
 
@@ -22,7 +22,7 @@ router.get('/profile', (req,res,next) => {
 
 
 // ---------/API/PROFILE/:USERID ----- //
-router.put('/profile/', myUploader.single('userImage'), (req, res, next) => {
+router.put('/myprofile/', myUploader.single('userImage'), (req, res, next) => {
   //console.log(req.params.id);
   console.log('I am inside the api/profile/put user --------') // DELETE BEFORE DEPLOYMENT
   console.log(req.user);  // DELETE BEFORE DEPLOYMENT
@@ -76,7 +76,7 @@ router.put('/profile/', myUploader.single('userImage'), (req, res, next) => {
 
 
 // ---------/API/PROFILE/:USERID (DELETE)----- //
-router.delete('/profile/:userId', (req,res,next) => {
+router.delete('/myprofile/:userId', (req,res,next) => {
   if(!req.user){
     res.status(401).json({errorMessage: 'Not logged in.'});
     return;
@@ -105,6 +105,19 @@ router.delete('/profile/:userId', (req,res,next) => {
   });// UserModel.findById ()
 }); // delete API/PROFILE/:USERID
 
-
+// API GET /api/profile/:userId
+router.get('/profile/:userId', (req, res, next) =>  {
+  UserModel.findById(
+    req.params.userId,
+      (err, userFromDb) => {
+        if (err) {
+          console.log('User find error');
+          res.status(500).json({ errorMessage: 'User find went wrong'});
+          return;
+        }
+        res.status(200).json(userFromDb);
+      }
+  )
+});
 
 module.exports = router;

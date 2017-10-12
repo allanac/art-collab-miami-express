@@ -17,6 +17,7 @@ router.get('/media', (req,res, next) => {
     MediaModel.find()
       .limit(10)
       .sort({ timestamps: -1})
+      .populate('owner', { encryptedPassword: 0 })
       .exec((err, recentMedia) => {
           if(err){
             res.status(500).json({errorMessage: 'Finding Media went wrong'});
@@ -42,18 +43,27 @@ router.get('/media/popular', (req,res, next) => {
 
 // ---------- GET /API/MEDIA/SEARCH --------- (search) //
 
-router.get('/media/search', (req,res,next) => {
-  const mySearchRegex = new RegExp(req.query.searchTerm, 'i');
+router.get('/media/:searchTerm', (req,res,next) => {
+
+  // let mySearchRegex = "mamabee";
+  let mySearchRegex = new RegExp(req.params.searchTerm, 'i');
+  console.log('MY Search Regex-->', mySearchRegex);
+  mySearchRegex.toString()
 
   MediaModel.find(
-    {title: mySearchRegex},
-    {team: mySearchRegex},
-    {status: mySearchRegex},
-    {category: mySearchRegex},
-    {owner: mySearchRegex},
+    { team: mySearchRegex,
+      $or:[
+            {title: mySearchRegex},
+            {team: mySearchRegex},
+            {status: mySearchRegex},
+            {category: mySearchRegex},
+            {owner: mySearchRegex},
+          ]
+        },
 
     (err, searchResults) => {
       if(err){
+        console.log('she likes cows');
         res.status(500).json({errorMessage:'Getting search results went wrong'});
         return;
       }
