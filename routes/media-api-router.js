@@ -53,7 +53,7 @@ router.get('/media/:searchTerm', (req,res,next) => {
   MediaModel.find(
     { team: mySearchRegex,
       $or:[
-            {title: mySearchRegex},
+            {title: {mySearchRegex}},
             {team: mySearchRegex},
             {status: mySearchRegex},
             {category: mySearchRegex},

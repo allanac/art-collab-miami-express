@@ -31,3 +31,6 @@ npm-debug.log
 
 #ENV Files
 .env
+
+#File Uploads
+public/uploads
