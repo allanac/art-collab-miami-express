@@ -3,10 +3,15 @@ const multer = require('multer');
 const UserModel = require('../models/user-model');
 const router = express.Router();
 
-const myUploader = multer({dest:__dirname + '/../public/uploads'});
+// const myUploader = multer({dest:__dirname + '/../public/uploads'});
+const myUploader = require('../config/multer-config');
 
 // ---------- /API/PROFILE --------- //
 router.get('/myprofile', (req,res,next) => {
+  if(!req.user) {
+    res.status(401).json({errorMessage:'Not logged in.'});
+    return;
+  }
   console.log('The /API/PROFILE User: -------'); // DELETE THIS LINE BEFORE DEPLOYMENT
   console.log(req.user); // DELETE THIS LINE BEFORE DEPLOYMENT
 
@@ -49,7 +54,10 @@ router.put('/myprofile/', myUploader.single('userImage'), (req, res, next) => {
       artTools: req.body.userArtTools,
       bio: req.body.userBio
     });
-    if(req.file){userFromDb.profilePic = '/uploads/' + req.file.filename;}
+    if(req.file){
+      // userFromDb.profilePic = '/uploads/' + req.file.filename;
+      userFromDb.profilePic = req.file.location;
+    }
 
     console.log('After set before save - line 57');
     console.log(req.user);

@@ -4,13 +4,14 @@ const multer = require('multer');
 const MediaModel = require('../models/media-model');
 
 const router = express.Router();
-
-const myUploader =
-multer(
-  {
-    dest: __dirname + '/../public/uploads'
-  }
-);
+//
+// const myUploader =
+// multer(
+//   {
+//     dest: __dirname + '/../public/uploads'
+//   }
+// );
+const myUploader = require('../config/multer-config');
 
 // ---------- GET /API/MEDIA --------- (latest media) //
 router.get('/media', (req,res, next) => {
@@ -92,7 +93,8 @@ router.post('/media/', myUploader.single('mediaFile'), (req, res, next) => {
   });
 
   if(req.file) {
-    theMedia.mediaFile = '/uploads/' + req.file.filename;
+    // theMedia.mediaFile = '/uploads/' + req.file.filename;
+    theMedia.mediaFile =  req.file.location;
   }
 
   theMedia.save((err) => {
