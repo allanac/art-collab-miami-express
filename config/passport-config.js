@@ -39,6 +39,7 @@ passport.use(
                   }
                   if(!userFromDb){
                     done(null, false, {message:'That\'s not the right username'});
+                    return;
                   }
 
                   // setup User encryptedPassword
