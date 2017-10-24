@@ -28,9 +28,6 @@ router.get('/myprofile', (req,res,next) => {
 
 // ---------/API/PROFILE/:USERID ----- //
 router.put('/myprofile/', myUploader.single('userImage'), (req, res, next) => {
-  //console.log(req.params.id);
-  console.log('I am inside the api/profile/put user --------') // DELETE BEFORE DEPLOYMENT
-  console.log(req.user);  // DELETE BEFORE DEPLOYMENT
 
   if(!req.user) {
     res.status(401).json({errorMessage:'Not logged in.'});
